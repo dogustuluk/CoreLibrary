@@ -1,3 +1,6 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidationApp.Web.FluentValidators;
 using FluentValidationApp.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,8 +34,12 @@ namespace FluentValidationApp.Web
             });
 
 
-
-            services.AddControllersWithViews();
+            // services.AddSingleton<IValidator<Customer>, CustomerValidator>(); //eðer bu þekilde kullanýrsak her bir validator için tek tek yazmamýz gerekecektir.
+            //Ama aþaðýdaki gibi yazarsak her bir validator için otomatik olarak uygulamamýzýn haberdar olmasýný saðlarýz.
+            services.AddControllersWithViews().AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
